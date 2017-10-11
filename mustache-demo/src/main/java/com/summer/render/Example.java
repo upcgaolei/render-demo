@@ -5,9 +5,9 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import lombok.ToString;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -47,5 +47,13 @@ public class Example {
         MustacheFactory mf = new DefaultMustacheFactory();
         Mustache mustache = mf.compile("template.mustache");
         mustache.execute(new PrintWriter(System.out), new Example()).flush();
+
+        HashMap<String, Object> scopes = new HashMap<>();
+        scopes.put("name", "Mustache");
+        scopes.put("feature", new Feature("perfect!"));
+
+        MustacheFactory mf1 = new DefaultMustacheFactory();
+        Mustache mustache1 = mf1.compile(new StringReader("{{name}}, {{feature.description}}"), "example");
+        mustache1.execute(new PrintWriter(System.out), scopes).flush();
     }
 }
